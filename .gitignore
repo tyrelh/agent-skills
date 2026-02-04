@@ -1,3 +1,4 @@
 *
+!.gitignore
 !manage-shortcut-stories/
-!get-shortcut-story-details/
+!manage-shortcut-stories/**
