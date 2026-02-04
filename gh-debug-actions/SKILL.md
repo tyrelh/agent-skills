@@ -50,6 +50,16 @@ Use `gh run view` to pull logs:
 
 Prefer `--log-failed` when the user asks “why did it fail?” or wants a summary. Prefer full logs when they explicitly ask for raw logs.
 
+If logs are missing (e.g., `log not found` for a job), use these fallbacks:
+- Download the full run log archive and inspect locally:
+  - `gh api /repos/<owner>/<repo>/actions/runs/<run-id>/logs > /tmp/run-<id>-logs.zip`
+- Pull the job’s check-run annotations for a concise failure reason:
+  - `gh run view <run-id> -R <owner/repo> --json jobs -q '.jobs[].databaseId'`
+  - `gh api /repos/<owner>/<repo>/check-runs/<job-id>/annotations`
+- If the check-run includes a deployment, inspect deployment status:
+  - `gh api /repos/<owner>/<repo>/check-runs/<job-id>`
+  - `gh api /repos/<owner>/<repo>/deployments/<deployment-id>/statuses`
+
 Use the helper script when you want consistent, repeatable log capture:
 - `scripts/gh_run_logs.sh` (see Resources)
 

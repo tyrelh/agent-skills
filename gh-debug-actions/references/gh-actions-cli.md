@@ -9,6 +9,13 @@
   - `gh run view <run-id> -R <owner/repo> --log`
 - View only failed steps:
   - `gh run view <run-id> -R <owner/repo> --log-failed`
+- Download full run log archive (when job logs are missing):
+  - `gh api /repos/<owner>/<repo>/actions/runs/<run-id>/logs > /tmp/run-<id>-logs.zip`
+- Check-run annotations (often the only failure reason for “log not found” jobs):
+  - `gh api /repos/<owner>/<repo>/check-runs/<job-id>/annotations`
+- Deployment status for protected environments:
+  - `gh api /repos/<owner>/<repo>/check-runs/<job-id>`
+  - `gh api /repos/<owner>/<repo>/deployments/<deployment-id>/statuses`
 
 ## Useful JSON Fields (gh run list --json)
 `databaseId, displayTitle, createdAt, conclusion, status, headBranch, workflowName, event, url`
