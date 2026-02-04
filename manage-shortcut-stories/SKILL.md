@@ -1,27 +1,36 @@
 ---
 name: manage-shortcut-stories
-description: Manage Shortcut stories via API. Use when you need to find the most relevant Shortcut ticket for a Codex thread, or update a story's workflow state to in-progress (started) or ready-for-review. Includes keyword-based search with user prompts and workflow state updates. Can also fetch story details by ID.
+description: Manage Shortcut stories via API. Use when you need to find or create a Shortcut ticket, list projects/workflows/teams, assign owners/teams, fetch story details, or update a story's workflow state to in-progress (started) or ready-for-review. Includes keyword-based search with user prompts, story creation, and story updates.
 ---
 
 # Manage Shortcut Stories
 
 ## Overview
-Find the best-matching Shortcut story for the current thread and update its workflow state (started/in-progress or ready for review) using the Shortcut API.
+Find the best-matching Shortcut story for the current thread, create new stories when needed, assign teams/owners, and update workflow states using the Shortcut API.
 
 ## Quick Start
 1. Read `references/shortcut-config.md` for workflow IDs and configuration.
 2. Ensure `SHORTCUT_API_TOKEN` is set; fail fast with a clear message if missing.
-3. Use the bash scripts in `scripts/` for search and state updates to simplify debugging.
+3. Use the bash scripts in `scripts/` for search, creation, listing, and updates to simplify debugging.
 4. Before keyword search, check the current branch for `sc-<id>-` and fetch that story.
 5. If a branch story is found, ask the user to confirm it is the correct ticket.
 6. For search, collect keywords from the thread and prompt for more if ambiguous.
-7. For state updates, update the story with the target `workflow_state_id`.
+7. For creation, provide either `project_id` or `workflow_state_id`. If projects are not used, pick a workflow state (typically "Unstarted") via the workflows list.
+8. "Team" in the UI maps to `group_id` in the API; list groups to find the team ID.
+9. For state updates, update the story with the target `workflow_state_id`.
 
 ## Scripts
 - `scripts/shortcut_search.sh "<keywords>" [page_size]`
 - `scripts/shortcut_set_in_progress.sh <story_id>`
 - `scripts/shortcut_set_ready_for_review.sh <story_id>`
 - `scripts/shortcut_get_member.sh <member_id>`
+- `scripts/shortcut_get_story.sh <story_id>`
+- `scripts/shortcut_list_projects.sh [name_regex]`
+- `scripts/shortcut_list_groups.sh [name_regex]`
+- `scripts/shortcut_list_workflows.sh [name_regex]`
+- `scripts/shortcut_list_members.sh [name_or_email_regex]`
+- `scripts/shortcut_create_story.sh "<name>" "<description>" <story_type> [workflow_state_id] [group_id] [owner_ids_csv]`
+- `scripts/shortcut_set_group_and_owner.sh <story_id> [group_id] [owner_ids_csv]`
 
 All scripts respect:
 - `SHORTCUT_API_TOKEN` (required)
@@ -30,6 +39,11 @@ All scripts respect:
 - `SHORTCUT_STARTED_STATE_ID` and `SHORTCUT_READY_FOR_REVIEW_STATE_ID` (optional overrides)
 - `SHORTCUT_WORKFLOW_ID` (optional, default from `references/shortcut-config.md` for search filtering)
 - `SHORTCUT_SEARCH_DETAIL` (optional, default `full`)
+- `SHORTCUT_PROJECT_ID` (optional, used by create script)
+- `SHORTCUT_WORKFLOW_STATE_ID` (optional, used by create script)
+- `SHORTCUT_GROUP_ID` and `SHORTCUT_OWNER_IDS` (optional, used by update/create scripts)
+- `SHORTCUT_INCLUDE_ARCHIVED` (optional, list scripts include archived when set to `1`)
+- `SHORTCUT_DRY_RUN` (optional, when set to `1` prints payload without modifying data)
 
 ## Task: Find Matching Story
 - First check the current branch for a Shortcut ID pattern `sc-<id>-`.
@@ -67,6 +81,65 @@ Use `scripts/shortcut_search.sh` for a debuggable version of this call.
 
 If the endpoint, HTTP method, or response fields differ, ask the user for their Shortcut API details or docs and adjust.
 
+## Task: Create Story
+- Use when no existing story matches or the user requests a new ticket.
+- Provide either `project_id` or `workflow_state_id`.
+- If projects are not used, pick a workflow state from the workflows list (often "Unstarted").
+- Use the create script and include `group_id`/`owner_ids` if needed.
+
+### API Example (create)
+```bash
+curl -sS -X POST "$SHORTCUT_API_BASE_URL/stories" \
+  -H "Shortcut-Token: $SHORTCUT_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"<title>","story_type":"bug","workflow_state_id":500004424}'
+```
+Use `scripts/shortcut_create_story.sh` for a debuggable version of this call.
+
+## Task: List Projects
+- Use when the user wants to pick a project ID.
+- List projects and filter by name when possible.
+
+### API Example (projects)
+```bash
+curl -sS "$SHORTCUT_API_BASE_URL/projects" \
+  -H "Shortcut-Token: $SHORTCUT_API_TOKEN"
+```
+Use `scripts/shortcut_list_projects.sh` for a debuggable version of this call.
+
+## Task: List Teams (Groups)
+- "Teams" in the Shortcut UI map to `group_id` values in the API.
+- List groups and filter by team name to find the correct `group_id`.
+
+### API Example (groups)
+```bash
+curl -sS "$SHORTCUT_API_BASE_URL/groups" \
+  -H "Shortcut-Token: $SHORTCUT_API_TOKEN"
+```
+Use `scripts/shortcut_list_groups.sh` for a debuggable version of this call.
+
+## Task: List Workflows and States
+- Use when you need a `workflow_state_id` for story creation or transitions.
+- If no project is set, select an appropriate default state (often "Unstarted").
+
+### API Example (workflows)
+```bash
+curl -sS "$SHORTCUT_API_BASE_URL/workflows" \
+  -H "Shortcut-Token: $SHORTCUT_API_TOKEN"
+```
+Use `scripts/shortcut_list_workflows.sh` for a debuggable version of this call.
+
+## Task: List Members
+- Use when you need owner IDs for assignment.
+- Filter by name or email to find the correct member.
+
+### API Example (members)
+```bash
+curl -sS "$SHORTCUT_API_BASE_URL/members" \
+  -H "Shortcut-Token: $SHORTCUT_API_TOKEN"
+```
+Use `scripts/shortcut_list_members.sh` for a debuggable version of this call.
+
 ## Task: Move Story to In-Progress
 - Use the started state ID from `references/shortcut-config.md`.
 - Update the story with `workflow_state_id`.
@@ -93,6 +166,20 @@ curl -sS -X PUT "$SHORTCUT_API_BASE_URL/stories/<story_id>" \
 ```
 If your API requires `PATCH` instead of `PUT`, swap the method.
 Use `scripts/shortcut_set_ready_for_review.sh` for a debuggable version of this call.
+
+## Task: Assign Team and Owner
+- Use when the user wants the story assigned to a team or owner.
+- List groups for the team `group_id` and list members for owner IDs.
+- Update the story with `group_id` and `owner_ids`.
+
+### API Example (update)
+```bash
+curl -sS -X PUT "$SHORTCUT_API_BASE_URL/stories/<story_id>" \
+  -H "Shortcut-Token: $SHORTCUT_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"group_id":"<group_uuid>","owner_ids":["<member_uuid>"]}'
+```
+Use `scripts/shortcut_set_group_and_owner.sh` for a debuggable version of this call.
 
 ## Task: Resolve Owner Details
 - Given a story `owner_ids` entry, fetch the member details from the Shortcut API.
@@ -122,6 +209,7 @@ Use `scripts/shortcut_get_story.sh` for a debuggable version of this call.
 ## Error Handling
 - 401/403: token missing or invalid. Ask the user to confirm `SHORTCUT_API_TOKEN`.
 - 404: story not found. Confirm the story ID.
+- 400: missing `project_id` and `workflow_state_id` on create. Ask for a project or workflow state.
 - Other non-2xx: ask the user to confirm the API base URL or provide docs.
 
 ## References
