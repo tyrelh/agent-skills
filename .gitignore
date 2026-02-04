@@ -2,3 +2,5 @@
 !.gitignore
 !manage-shortcut-stories/
 !manage-shortcut-stories/**
+!datadog-logs/
+!datadog-logs/**
