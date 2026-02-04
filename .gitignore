@@ -4,4 +4,6 @@
 !manage-shortcut-stories/**
 !datadog-logs/
 !datadog-logs/**
+!gh-debug-actions/
+!gh-debug-actions/**
 manage-shortcut-stories/references/shortcut-config.md
