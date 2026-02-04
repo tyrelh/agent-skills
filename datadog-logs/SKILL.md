@@ -13,13 +13,13 @@ Use this skill to query Datadog Logs for error-focused workflows with bash scrip
 
 - Create `datadog-logs/.env` from `datadog-logs/.env.example` and set `DD_API_KEY`, `DD_APP_KEY`, and `DD_SITE` (default is `us3`).
 - Run a search:
-  - `./scripts/logs_search.sh --service api --env prod --last 60`
+  - `./scripts/logs_search.sh --service api --env production --last 60`
 - Tail recent errors:
-  - `./scripts/logs_tail.sh --service api --env prod --interval 15`
+  - `./scripts/logs_tail.sh --service api --env production --interval 15`
 - Aggregate counts by service:
-  - `./scripts/logs_aggregate.sh --env prod --last 1440 --group-by service`
+  - `./scripts/logs_aggregate.sh --env production --last 1440 --group-by service`
 - Export to CSV:
-  - `./scripts/logs_export.sh --env prod --last 1440 --format csv --out /tmp/error_logs.csv`
+  - `./scripts/logs_export.sh --env production --last 1440 --format csv --out /tmp/error_logs.csv`
 
 ## Tasks
 
@@ -52,7 +52,7 @@ Use this skill to query Datadog Logs for error-focused workflows with bash scrip
 
 ## Query Notes
 
-- Default query includes `status:error` and adds `service:` and `env:` when provided.
+- Default query includes `status:error` and adds `service:` and `environment:` when provided.
 - Append additional filters with `--query`.
 
 ## Resources

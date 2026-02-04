@@ -116,7 +116,7 @@ build_query() {
     query="${query} service:${service}"
   fi
   if [[ -n "$env" ]]; then
-    query="${query} env:${env}"
+    query="${query} environment:${env}"
   fi
   if [[ -n "$extra" ]]; then
     query="${query} ${extra}"

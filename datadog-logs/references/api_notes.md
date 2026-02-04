@@ -48,5 +48,5 @@ Aggregate:
 ## Query Tips
 
 - `status:error` is a good base filter for error logs.
-- Add `service:<name>` and `env:<name>` to narrow results.
+- Add `service:<name>` and `environment:<name>` to narrow results.
 - Append other filters with `--query` (for example `team:platform @http.status_code:500`).

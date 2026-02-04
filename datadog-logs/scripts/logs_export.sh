@@ -13,7 +13,8 @@ Options:
   --env-file PATH     Path to .env file (default: skill .env)
   --query QUERY       Additional query text
   --service NAME      Service name
-  --env NAME          Environment name
+  --env NAME          Environment name (maps to environment:<name>)
+  --environment NAME  Alias for --env
   --status VALUE      Log status (default: error)
   --since TIME        RFC3339 start time (default: now - --last)
   --until TIME        RFC3339 end time (default: now)
@@ -44,7 +45,7 @@ while [[ $# -gt 0 ]]; do
     --env-file) ENV_FILE="$2"; shift 2 ;;
     --query) EXTRA_QUERY="$2"; shift 2 ;;
     --service) SERVICE="$2"; shift 2 ;;
-    --env) ENV_NAME="$2"; shift 2 ;;
+    --env|--environment) ENV_NAME="$2"; shift 2 ;;
     --status) STATUS="$2"; shift 2 ;;
     --since) SINCE="$2"; shift 2 ;;
     --until) UNTIL="$2"; shift 2 ;;
