@@ -1,6 +1,6 @@
 ---
 name: datadog-logs
-description: Interact with Datadog Logs via the Datadog API using bash scripts for searching, tailing, aggregating, and exporting error logs. Use when working with Datadog error logs, building log queries, or retrieving log data from the API.
+description: Interact with Datadog Logs via the Datadog API using bash scripts for searching, tailing, aggregating, and exporting error logs. Use for generic prompts like "fetch logs", "search logs", "tail logs", "export logs", or "count/aggregate logs" (including time windows such as "last 24 hours") and filters like service/environment (for example "api service in production"), even when the user does not explicitly mention Datadog or the skill name.
 ---
 
 # Datadog Logs
