@@ -11,3 +11,5 @@ manage-shortcut-stories/references/shortcut-config.md
 !terraform/**
 !gh-pr/
 !gh-pr/**
+!git-branch/
+!git-branch/**
