@@ -26,7 +26,7 @@ Loosely follow conventional commits for naming PRs.
 
 Generally can use the branch name for the PR name, but note the differences in separators. `type(scope)` should be followed by a colon `:` and a space, and the story or ticket number should be followed by a space. The short description should be the rest of the branch name with spaces between words.
 
-The description should be concise, but can be longer than the branch name. Try to keep it 
+The description should be concise, but can be longer than the branch name. Try to keep it within 60 characters.
 
 ### PR Creation
 
