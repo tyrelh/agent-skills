@@ -8,6 +8,8 @@ description: "Use this skill when a user asks to create a GitHub PR (pull reques
 ## Overview
 
 Use this skill as a reference for creating PRs.
+Use `references/teammates.md` for teammate names to GitHub handle lookups when adding reviewers.
+Use `references/tags.md` for mapping generic tag requests to exact GitHub label names.
 
 ## Prerequisites
 
