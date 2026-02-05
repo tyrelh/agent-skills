@@ -1,9 +1,11 @@
 *
-!.gitignore
+
 !manage-shortcut-stories/
 !manage-shortcut-stories/**
+manage-shortcut-stories/references/shortcut-config.md
 !datadog-logs/
 !datadog-logs/**
 !gh-debug-actions/
 !gh-debug-actions/**
-manage-shortcut-stories/references/shortcut-config.md
+!terraform/
+!terraform/**
