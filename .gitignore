@@ -9,5 +9,5 @@ manage-shortcut-stories/references/shortcut-config.md
 !gh-debug-actions/**
 !terraform/
 !terraform/**
-!gh-pr-create/
-!gh-pr-create/**
+!gh-pr/
+!gh-pr/**
