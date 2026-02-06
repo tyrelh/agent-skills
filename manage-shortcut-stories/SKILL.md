@@ -10,7 +10,7 @@ Find the best-matching Shortcut story for the current thread, create new stories
 
 ## Quick Start
 1. Read `references/shortcut-config.md` for workflow IDs and configuration.
-2. Ensure `SHORTCUT_API_TOKEN` is set; fail fast with a clear message if missing.
+2. Add `SHORTCUT_API_TOKEN=<token>` to `manage-shortcut-stories/.env` (see `.env.example`) or export it in your shell; scripts load `.env` automatically and fail fast if missing.
 3. Use the bash scripts in `scripts/` for search, creation, listing, and updates to simplify debugging.
 4. Before keyword search, check the current branch for `sc-<id>-` and fetch that story.
 5. If a branch story is found, ask the user to confirm it is the correct ticket.
@@ -18,6 +18,10 @@ Find the best-matching Shortcut story for the current thread, create new stories
 7. For creation, provide either `project_id` or `workflow_state_id`. If projects are not used, pick a workflow state (typically "Unstarted") via the workflows list.
 8. "Team" in the UI maps to `group_id` in the API; list groups to find the team ID.
 9. For state updates, update the story with the target `workflow_state_id`.
+
+## Conventions
+- When taking on a ticket, always ensure it's assigned to the user, gets put in the current iteration, and it gets moved to in-progress appropriately.
+- When opening a pull request for a given ticket, move the ticket to ready for review.
 
 ## Scripts
 - `scripts/shortcut_search.sh "<keywords>" [page_size]`
@@ -34,6 +38,7 @@ Find the best-matching Shortcut story for the current thread, create new stories
 
 All scripts respect:
 - `SHORTCUT_API_TOKEN` (required)
+- `SHORTCUT_ENV_FILE` (optional path override for `.env`, default `manage-shortcut-stories/.env`)
 - `SHORTCUT_API_BASE_URL` (optional override)
 - `SHORTCUT_UPDATE_METHOD` (optional, default `PUT`)
 - `SHORTCUT_STARTED_STATE_ID` and `SHORTCUT_READY_FOR_REVIEW_STATE_ID` (optional overrides)

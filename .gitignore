@@ -2,6 +2,7 @@
 
 !manage-shortcut-stories/
 !manage-shortcut-stories/**
+manage-shortcut-stories/.env
 manage-shortcut-stories/references/shortcut-config.md
 !datadog-logs/
 !datadog-logs/**

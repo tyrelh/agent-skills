@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [[ -z "${SHORTCUT_API_TOKEN:-}" ]]; then
-  echo "SHORTCUT_API_TOKEN is not set" >&2
-  exit 1
-fi
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=/dev/null
+source "$SCRIPT_DIR/_shortcut_env.sh"
+require_shortcut_api_token
 
 if [[ $# -lt 3 ]]; then
   echo "Usage: shortcut_create_story.sh \"<name>\" \"<description>\" <story_type> [workflow_state_id] [group_id] [owner_ids_csv]" >&2
