@@ -33,6 +33,7 @@ Find the best-matching Shortcut story for the current thread, create new stories
 - `scripts/shortcut_list_groups.sh [name_regex]`
 - `scripts/shortcut_list_workflows.sh [name_regex]`
 - `scripts/shortcut_list_members.sh [name_or_email_regex]`
+- `scripts/shortcut_list_stories_by_label.sh "<label_name>" [page_size]`
 - `scripts/shortcut_create_story.sh "<name>" "<description>" <story_type> [workflow_state_id] [group_id] [owner_ids_csv]`
 - `scripts/shortcut_set_group_and_owner.sh <story_id> [group_id] [owner_ids_csv]`
 
@@ -144,6 +145,24 @@ curl -sS "$SHORTCUT_API_BASE_URL/members" \
   -H "Shortcut-Token: $SHORTCUT_API_TOKEN"
 ```
 Use `scripts/shortcut_list_members.sh` for a debuggable version of this call.
+
+## Task: List Stories by Label
+- Use when you need all stories/tickets for a given label.
+- The script paginates through all results using Shortcut search `next` cursors.
+- Default query is exact label match (`label:"<label_name>"`).
+- By default archived stories are excluded; set `SHORTCUT_INCLUDE_ARCHIVED=1` to include them.
+- Optional workflow filtering is respected via `SHORTCUT_WORKFLOW_ID`.
+
+### API Example (label search)
+```bash
+curl -sS -G "$SHORTCUT_API_BASE_URL/search/stories" \
+  -H "Shortcut-Token: $SHORTCUT_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  --data-urlencode "query=label:\"<label_name>\"" \
+  --data-urlencode "page_size=25" \
+  --data-urlencode "detail=full"
+```
+Use `scripts/shortcut_list_stories_by_label.sh` for a paginated, debuggable version of this call.
 
 ## Task: Move Story to In-Progress
 - Use the started state ID from `references/shortcut-config.md`.
