@@ -28,6 +28,14 @@ Generally can use the branch name for the PR name, but note the differences in s
 
 The description should be concise, but can be longer than the branch name. Try to keep it within 60 characters.
 
+### PR Description Body
+
+The PR description body should outline the changes made in the PR. Ideally in 2-3 sentences, but can be more or less depending on the complexity of the changes.
+
+Try not to use `\n` characters. They don't render well in the GitHub PR description body.
+
+If a ticket is available when creating the PR, add a link to the ticket in the description body.
+
 ### PR Creation
 
 Create the PR using the `gh` CLI.
